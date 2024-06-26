@@ -58,7 +58,7 @@ dependencies {
     annotationProcessor(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.accompanist.systemuicontroller)
-//    kapt(libs.androidx.room.compiler)
+    kapt(libs.androidx.room.compiler)
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     kapt(libs.androidx.hilt.compiler)

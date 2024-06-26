@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.todolistapp.R
 import com.example.todolistapp.composable.ActionButton
@@ -33,12 +34,14 @@ import com.example.todolistapp.composable.InputFieldWithLabel
 import com.example.todolistapp.composable.InputTopLabel
 import com.example.todolistapp.composable.TaskDescriptionInput
 import com.example.todolistapp.composable.ToolBar
+import com.example.todolistapp.domain.model.TaskModel
 import com.example.todolistapp.ui.theme.ToDoTheme
 
 @ExperimentalComposeUiApi
 @ExperimentalMaterial3Api
 @Composable
 fun TaskScreen(
+    viewModel: AddNewTaskViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
     ChangeSystemBarColor(statusBarColor = ToDoTheme.tmColors.screenHeader)
@@ -88,10 +91,16 @@ fun TaskScreen(
                 Spacer(modifier = Modifier.height(ToDoTheme.tMDimensions.paddingXXL))
                 ActionButton(
                     text = stringResource(id = R.string.save),
-                    modifier = Modifier.width(100.dp).align(Alignment.End),
+                    modifier = Modifier
+                        .width(100.dp)
+                        .align(Alignment.End),
                     inverted = true,
                     onClick = {
-                        //TODO
+                        val task = TaskModel(
+                            title = taskTitle,
+                            description = taskDescription
+                        )
+                        viewModel.addTask(taskModel = task)
                     })
             }
         }

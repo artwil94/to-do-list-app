@@ -3,13 +3,7 @@ package com.example.todolistapp.data
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-
-
-enum class TaskPriority {
-    LOW,
-    MEDIUM,
-    HIGH
-}
+import com.example.todolistapp.domain.model.Priority
 
 @Entity(tableName = "task_table")
 data class Task(
@@ -20,9 +14,9 @@ data class Task(
     @ColumnInfo("description")
     val description: String,
     @ColumnInfo("due_date")
-    val dueDate: String,
+    val dueDate: String? = null,
     @ColumnInfo("category")
-    val category: String,
+    val category: String? = null,
     @ColumnInfo("priority")
-    val priority: TaskPriority
+    val priority: Priority? = null
 )

@@ -14,8 +14,8 @@ import com.example.todolistapp.ui.theme.ToDoListAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @ExperimentalComposeUiApi
-@AndroidEntryPoint
 @ExperimentalMaterial3Api
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

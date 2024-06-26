@@ -127,14 +127,14 @@ data class TdTypography(
         color = Color(0xFF333333),
         fontFamily = ToDoTheme.fonts.freigeistMedium
     ),
-    val itemNameCard: TextStyle = TextStyle(
+    val taskTitle: TextStyle = TextStyle(
         fontSize = 18.sp,
         lineHeight = 24.sp,
         fontFamily = ToDoTheme.fonts.freigeistMedium,
         fontWeight = FontWeight(550),
         color = Color(0xFF333333),
     ),
-    val itemCardLabel: TextStyle = TextStyle(
+    val taskDescription: TextStyle = TextStyle(
         fontSize = 12.sp,
         lineHeight = 18.sp,
         fontFamily = ToDoTheme.fonts.robotoLight,
@@ -226,7 +226,8 @@ data class TdDimensions(
     val paddingXL: Dp = 24.dp,
     val paddingXXL: Dp = 30.dp,
     val screenHeaderHeight: Dp = 120.dp,
-    val dialogPadding: Dp = 50.dp
+    val dialogPadding: Dp = 50.dp,
+    val priorityIndicator: Dp = 20.dp
 )
 
 data class TdColors(
