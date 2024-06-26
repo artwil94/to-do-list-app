@@ -74,10 +74,10 @@ fun RowScope.AddItem(
     } == true
     BottomNavigationItem(
         modifier = Modifier
-            .padding(top = ToDoTheme.tMDimensions.paddingXs)
+            .padding(top = ToDoTheme.tDDimensions.paddingXs)
             .clip(ToDoTheme.tDShapes.tabShape)
             .background(
-                color = if (selected) ToDoTheme.tmColors.bottomBar else Color.White,
+                color = if (selected) ToDoTheme.tDColors.bottomBar else Color.White,
                 shape = if (selected) ToDoTheme.tDShapes.tabShape else RoundedCornerShape(0.dp)
             ),
         selected = selected,
@@ -100,7 +100,7 @@ fun RowScope.AddItem(
                 else ToDoTheme.tDTypography.bottomBarLabelUnSelect
             )
         },
-        selectedContentColor = ToDoTheme.tmColors.bottomBar,
+        selectedContentColor = ToDoTheme.tDColors.bottomBar,
         unselectedContentColor = Color.White
     )
 }

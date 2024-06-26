@@ -37,12 +37,12 @@ fun ToolBar(
 ) {
     CenterAlignedTopAppBar(
         modifier = Modifier.shadow(
-            elevation = if (withShadowing) ToDoTheme.tMDimensions.paddingXL else 0.dp,
+            elevation = if (withShadowing) ToDoTheme.tDDimensions.paddingXL else 0.dp,
             spotColor = Color(0x0D000000)
         ),
         title = {
             if (showTitle) {
-                Box(modifier = Modifier.padding(start = ToDoTheme.tMDimensions.paddingS)) {
+                Box(modifier = Modifier.padding(start = ToDoTheme.tDDimensions.paddingS)) {
                     Text(
                         modifier = Modifier.background(color = backgroundTextColor),
                         text = title ?: "",
@@ -57,8 +57,8 @@ fun ToolBar(
             if (showBackNavigation) {
                 Box(
                     modifier = Modifier.padding(
-                        start = ToDoTheme.tMDimensions.padding,
-                        end = ToDoTheme.tMDimensions.padding
+                        start = ToDoTheme.tDDimensions.padding,
+                        end = ToDoTheme.tDDimensions.padding
                     )
                 ) {
                     Icon(

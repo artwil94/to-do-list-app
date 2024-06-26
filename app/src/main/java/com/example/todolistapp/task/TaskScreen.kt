@@ -32,8 +32,10 @@ import com.example.todolistapp.composable.ActionButton
 import com.example.todolistapp.composable.ChangeSystemBarColor
 import com.example.todolistapp.composable.InputFieldWithLabel
 import com.example.todolistapp.composable.InputTopLabel
+import com.example.todolistapp.composable.PriorityDropDown
 import com.example.todolistapp.composable.TaskDescriptionInput
 import com.example.todolistapp.composable.ToolBar
+import com.example.todolistapp.domain.model.Priority
 import com.example.todolistapp.domain.model.TaskModel
 import com.example.todolistapp.ui.theme.ToDoTheme
 
@@ -44,7 +46,7 @@ fun TaskScreen(
     viewModel: AddNewTaskViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
-    ChangeSystemBarColor(statusBarColor = ToDoTheme.tmColors.screenHeader)
+    ChangeSystemBarColor(statusBarColor = ToDoTheme.tDColors.screenHeader)
     Scaffold(
         modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars),
         containerColor = Color.White,
@@ -65,11 +67,12 @@ fun TaskScreen(
         ) {
             var taskTitle by rememberSaveable { mutableStateOf("") }
             var taskDescription by rememberSaveable { mutableStateOf("") }
+            var taskPriority by rememberSaveable { mutableStateOf(Priority.LOW) }
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .systemBarsPadding()
-                    .padding(ToDoTheme.tMDimensions.padding)
+                    .padding(ToDoTheme.tDDimensions.padding)
             ) {
                 InputFieldWithLabel(
                     text = taskTitle,
@@ -79,16 +82,21 @@ fun TaskScreen(
                             taskTitle = text
                         }
                     })
-                Spacer(modifier = Modifier.height(ToDoTheme.tMDimensions.paddingXL))
+                Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingXL))
+                InputTopLabel(title = stringResource(id = R.string.priority))
+                PriorityDropDown(
+                    priority = taskPriority,
+                    onPriority = { priority -> taskPriority = priority })
+                Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingXL))
                 InputTopLabel(title = stringResource(id = R.string.description))
-                Spacer(modifier = Modifier.height(ToDoTheme.tMDimensions.paddingS))
+                Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingS))
                 TaskDescriptionInput(text = taskDescription,
                     onValueChange = { text: String ->
                         if (text.length <= 400) {
                             taskDescription = text
                         }
                     })
-                Spacer(modifier = Modifier.height(ToDoTheme.tMDimensions.paddingXXL))
+                Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingXXL))
                 ActionButton(
                     text = stringResource(id = R.string.save),
                     modifier = Modifier
@@ -98,7 +106,8 @@ fun TaskScreen(
                     onClick = {
                         val task = TaskModel(
                             title = taskTitle,
-                            description = taskDescription
+                            description = taskDescription,
+                            priority = taskPriority
                         )
                         viewModel.addTask(taskModel = task)
                     })

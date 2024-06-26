@@ -22,8 +22,8 @@ fun ScreenHeader(title: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(ToDoTheme.tMDimensions.screenHeaderHeight)
-            .background(color = ToDoTheme.tmColors.screenHeader),
+            .height(ToDoTheme.tDDimensions.screenHeaderHeight)
+            .background(color = ToDoTheme.tDColors.screenHeader),
         contentAlignment = Alignment.Center
     ) {
         Text(

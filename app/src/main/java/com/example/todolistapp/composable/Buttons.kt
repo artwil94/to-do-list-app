@@ -30,7 +30,7 @@ fun ActionButton(
     modifier: Modifier = Modifier,
     text: String,
     actionButtonType: ActionButtonType = ActionButtonType.Default,
-    color: Color = ToDoTheme.tmColors.actionButton,
+    color: Color = ToDoTheme.tDColors.actionButton,
     inverted: Boolean = false,
     @DrawableRes leadingIcon: Int? = null,
     onClick: () -> Unit,
@@ -58,9 +58,9 @@ fun ActionButton(
                 Icon(
                     painter = painterResource(id = leadingIcon),
                     contentDescription = "",
-                    tint = ToDoTheme.tmColors.textStandard
+                    tint = ToDoTheme.tDColors.textStandard
                 )
-                Spacer(modifier = Modifier.width(ToDoTheme.tMDimensions.paddingXs))
+                Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.paddingXs))
             }
             Text(
                 text = text.uppercase(),

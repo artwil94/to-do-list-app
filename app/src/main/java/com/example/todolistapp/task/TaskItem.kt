@@ -19,19 +19,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.todolistapp.R
+import com.example.todolistapp.data.Task
 import com.example.todolistapp.domain.model.Priority
-import com.example.todolistapp.domain.model.TaskModel
 import com.example.todolistapp.ui.theme.ToDoTheme
 
 @Preview(showBackground = true, backgroundColor = 0xFFFFFF)
 @Composable
 fun TaskItemPreview() {
-    TaskItem(TaskModel(title = "Task", description = "Example Task", priority = Priority.MEDIUM))
+    TaskItem(Task(title = "Task", description = "Example Task", priority = Priority.MEDIUM))
 }
 
 @Composable
 fun TaskItem(
-    taskModel: TaskModel,
+    task: Task,
     isTaskDone: Boolean = false,
     onCheckboxClick: () -> Unit = {}
 ) {
@@ -47,15 +47,15 @@ fun TaskItem(
             ),
             contentDescription = null
         )
-        Spacer(modifier = Modifier.width(ToDoTheme.tMDimensions.padding))
+        Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.padding))
         Column {
             Text(
-                text = taskModel.title,
+                text = task.title,
                 style = ToDoTheme.tDTypography.taskTitle,
                 textDecoration = if (isTaskDone) TextDecoration.LineThrough else TextDecoration.None
             )
-            Spacer(modifier = Modifier.height(ToDoTheme.tMDimensions.paddingS))
-            Text(text = taskModel.description, style = ToDoTheme.tDTypography.taskDescription)
+            Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingS))
+            Text(text = task.description, style = ToDoTheme.tDTypography.taskDescription)
         }
         Spacer(modifier = Modifier.weight(8f))
         Box(
@@ -63,8 +63,8 @@ fun TaskItem(
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            Canvas(modifier = Modifier.size(ToDoTheme.tMDimensions.priorityIndicator)) {
-                drawCircle(color = taskModel.priority?.color ?: Color.Transparent)
+            Canvas(modifier = Modifier.size(ToDoTheme.tDDimensions.priorityIndicator)) {
+                drawCircle(color = task.priority?.color ?: Color.Transparent)
             }
         }
     }

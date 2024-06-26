@@ -88,9 +88,9 @@ object ToDoTheme {
     val tDShapes: TdShapes
         @Composable get() = TdShapes()
     val fonts: Fonts = Fonts()
-    val tMDimensions: TdDimensions
+    val tDDimensions: TdDimensions
         @Composable get() = TdDimensions()
-    val tmColors: TdColors
+    val tDColors: TdColors
         @Composable get() = TdColors()
 }
 
@@ -227,7 +227,7 @@ data class TdDimensions(
     val paddingXXL: Dp = 30.dp,
     val screenHeaderHeight: Dp = 120.dp,
     val dialogPadding: Dp = 50.dp,
-    val priorityIndicator: Dp = 20.dp
+    val priorityIndicator: Dp = 16.dp
 )
 
 data class TdColors(
@@ -235,8 +235,8 @@ data class TdColors(
     val shadow: Color = Color(0x0D000000),
     val backgroundScreen: Color = Color(0xFFECECEC),
     val bottomBar: Color = Color(0xFF5C6BC0),
-//    val screenHeader: Color = Color(0xFF5C6BC0),
     val selectedItem: Color = Color(0xFF4DB6AC),
     val screenHeader: Color = Color(0xFF3F51B5),
     val actionButton: Color = bottomBar,
+    val mediumPriority: Color = Color(0xFFFFCA28)
 )
