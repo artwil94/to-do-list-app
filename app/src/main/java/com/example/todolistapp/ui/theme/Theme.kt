@@ -152,7 +152,7 @@ data class TdTypography(
         fontSize = 20.sp,
         lineHeight = 28.sp,
         fontWeight = FontWeight(550),
-        color = Color.White,
+        color = Color(0xFF333333),
         fontFamily = ToDoTheme.fonts.freigeistMedium,
         textAlign = TextAlign.Center
     ),
@@ -201,6 +201,7 @@ data class TdTypography(
         color = Color(0xFF696878),
         fontFamily = ToDoTheme.fonts.robotoLight
     ),
+    val priorityLabel: TextStyle = bottomBarLabelUnSelect
 )
 
 data class Fonts(
@@ -227,7 +228,10 @@ data class TdDimensions(
     val paddingXXL: Dp = 30.dp,
     val screenHeaderHeight: Dp = 120.dp,
     val dialogPadding: Dp = 50.dp,
-    val priorityIndicator: Dp = 16.dp
+    val priorityIndicator: Dp = 16.dp,
+    val editTaskIcon: Dp = 20.dp,
+    val priorityIndicatorMin: Dp = 8.dp,
+
 )
 
 data class TdColors(
@@ -238,5 +242,7 @@ data class TdColors(
     val selectedItem: Color = Color(0xFF4DB6AC),
     val screenHeader: Color = Color(0xFF3F51B5),
     val actionButton: Color = bottomBar,
-    val mediumPriority: Color = Color(0xFFFFCA28)
+    val confirmationDialog: Color = bottomBar,
+    val mediumPriority: Color = Color(0xFFFFCA28),
+    val addNewButton: Color = Color(0xFF7CB342),
 )

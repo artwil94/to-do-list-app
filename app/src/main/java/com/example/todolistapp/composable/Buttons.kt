@@ -1,6 +1,7 @@
 package com.example.todolistapp.composable
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -37,14 +38,21 @@ fun ActionButton(
 ) {
     val colors =
         ButtonDefaults.buttonColors(
-            if (actionButtonType == ActionButtonType.Default) color
-            else Color.White
+            when (actionButtonType) {
+                ActionButtonType.Default -> color
+                ActionButtonType.WithBorder -> color
+                else -> Color.White
+            }
         )
     Button(
         onClick = { onClick.invoke() },
         modifier = modifier
             .height(40.dp)
             .then(modifier),
+        border = BorderStroke(
+            width = if (actionButtonType == ActionButtonType.WithBorder) 1.dp else 0.dp,
+            color = Color.White
+        ),
         colors = colors,
         contentPadding = PaddingValues(
             start = 16.dp,
@@ -58,7 +66,7 @@ fun ActionButton(
                 Icon(
                     painter = painterResource(id = leadingIcon),
                     contentDescription = "",
-                    tint = ToDoTheme.tDColors.textStandard
+                    tint = if (inverted) Color.White else ToDoTheme.tDColors.textStandard
                 )
                 Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.paddingXs))
             }
@@ -72,5 +80,6 @@ fun ActionButton(
 
 enum class ActionButtonType {
     Default,
-    Cancel
+    Cancel,
+    WithBorder
 }

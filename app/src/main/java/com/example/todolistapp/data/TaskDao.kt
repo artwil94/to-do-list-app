@@ -20,7 +20,10 @@ interface TaskDao {
     suspend fun updateTask(task: Task)
 
     @Query("SELECT * from task_table WHERE id = :id")
-    fun getTask(id: Int): Flow<Task>
+    fun getSelectedTask(id: Int): Flow<Task>
+
+    @Query("SELECT * from task_table WHERE id = :id")
+    fun getTaskObject(id: Int): Task
 
     @Query("SELECT * FROM task_table ORDER BY id ASC")
     fun getAllTasks(): Flow<List<Task>>

@@ -12,6 +12,10 @@
     <string name="description">Description</string>
     <string name="priority">Priority</string>
 
+    <string name="confirmation_dialog_are_you_sure_to_delete_task">Are you sure to remove this task?</string>
+    <string name="confirmation_dialog_remove">Remove</string>
+    <string name="confirmation_dialog_cancel">Cancel</string>
+
     <string name="content_description_home_screen">Home Screen</string>
     <string name="content_description_new_task">New Task</string>
     <string name="content_description_settings">Settings</string>

@@ -22,17 +22,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.todolistapp.R
 import com.example.todolistapp.composable.ActionButton
+import com.example.todolistapp.composable.ActionButtonType
 import com.example.todolistapp.composable.ChangeSystemBarColor
+import com.example.todolistapp.composable.ConfirmationDialog
 import com.example.todolistapp.composable.ScreenHeader
+import com.example.todolistapp.data.Task
 import com.example.todolistapp.navigation.BottomBar
 import com.example.todolistapp.navigation.Screen
 import com.example.todolistapp.task.TaskItem
@@ -49,16 +54,8 @@ fun HomeScreen(
         viewModel.getAllTasks()
     }
     val allTasks by viewModel.allTasks.collectAsState()
-//    val lifecycle = LocalLifecycleOwner.current.lifecycle
-//    val tasks by produceState<List<TaskModel>>(
-//        initialValue = emptyList(),
-//        key1 = lifecycle,
-//        key2 = viewModel
-//    ) {
-//        lifecycle.repeatOnLifecycle(state = Lifecycle.State.STARTED) {
-//            viewModel.taskState.collect { value = it }
-//        }
-//    }
+    var showDeleteConfirmDialog by remember { mutableStateOf(false) }
+    val selectedTask = remember { mutableStateOf<Task?>(null) }
     Scaffold(
         modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars),
         containerColor = ToDoTheme.tDColors.backgroundScreen,
@@ -81,9 +78,11 @@ fun HomeScreen(
             ) {
                 ActionButton(
                     text = stringResource(id = R.string.add_new),
-                    color = Color.Yellow,
+                    color = ToDoTheme.tDColors.bottomBar,
+                    inverted = true,
                     leadingIcon = R.drawable.ic_add_item,
-                    onClick = { navController.navigate(Screen.Task.route) },
+                    actionButtonType = ActionButtonType.WithBorder,
+                    onClick = { navController.navigate(Screen.Task.route(taskId = null)) },
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Icon(
@@ -108,27 +107,42 @@ fun HomeScreen(
                             top = ToDoTheme.tDDimensions.paddingL
                         )
                 ) {
-//                    items(allTasks, key = { task -> task.id }) { task ->
-//                        TaskItem(
-//                            taskModel = task,
-////                            isTaskDone = uiState.isDone,
-//                            onCheckboxClick = {
-//                                viewModel.onDoneClick()
-//                            })
-                   items(allTasks, key = { task -> task.id}) {task->
-                       TaskItem(
-                           task = task,
-//                            isTaskDone = uiState.isDone,
-                           onCheckboxClick = {
-//                               viewModel.onDoneClick()
-                           })
-                       Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.padding))
-                   }
-                        item {
-                            Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.padding))
-                        }
+                    items(allTasks, key = { task -> task.id }) { task ->
+                        TaskItem(
+                            task = task,
+                            onCheckboxClick = {
+                                //TODO
+                            },
+                            onDeleteClick = {
+                                showDeleteConfirmDialog = true
+                                selectedTask.value = task
+                            },
+                            onEditClick = {
+                                navController.navigate(Screen.Task.route(taskId = task.id.toString()))
+                                viewModel.updateTask()
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.padding))
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.padding))
                     }
                 }
             }
         }
     }
+    if (showDeleteConfirmDialog) {
+        ConfirmationDialog(
+            title = stringResource(id = R.string.confirmation_dialog_are_you_sure_to_delete_task),
+            confirmText = stringResource(id = R.string.confirmation_dialog_remove),
+            cancelText = stringResource(id = R.string.confirmation_dialog_cancel),
+            onConfirm = {
+                selectedTask.value?.let { viewModel.deleteTask(task = it) }
+                showDeleteConfirmDialog = false
+            },
+            onCancel = {
+                showDeleteConfirmDialog = false
+            }
+        )
+    }
+}

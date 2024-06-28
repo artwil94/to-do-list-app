@@ -16,9 +16,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -35,15 +32,17 @@ import com.example.todolistapp.composable.InputTopLabel
 import com.example.todolistapp.composable.PriorityDropDown
 import com.example.todolistapp.composable.TaskDescriptionInput
 import com.example.todolistapp.composable.ToolBar
-import com.example.todolistapp.domain.model.Priority
-import com.example.todolistapp.domain.model.TaskModel
+import com.example.todolistapp.data.Task
+import com.example.todolistapp.home.TaskViewModel
 import com.example.todolistapp.ui.theme.ToDoTheme
+import com.example.todolistapp.utils.Constants.TASK_DESCRIPTION_LENGTH_LIMIT
 
 @ExperimentalComposeUiApi
 @ExperimentalMaterial3Api
 @Composable
 fun TaskScreen(
-    viewModel: AddNewTaskViewModel = hiltViewModel(),
+    viewModel: TaskViewModel = hiltViewModel(),
+    selectedTask: Task?,
     navController: NavHostController
 ) {
     ChangeSystemBarColor(statusBarColor = ToDoTheme.tDColors.screenHeader)
@@ -65,9 +64,9 @@ fun TaskScreen(
                 .padding(innerPadding)
                 .background(color = Color.White)
         ) {
-            var taskTitle by rememberSaveable { mutableStateOf("") }
-            var taskDescription by rememberSaveable { mutableStateOf("") }
-            var taskPriority by rememberSaveable { mutableStateOf(Priority.LOW) }
+            val taskTitle by viewModel.title
+            val taskDescription by viewModel.description
+            val taskPriority by viewModel.priority
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -77,23 +76,22 @@ fun TaskScreen(
                 InputFieldWithLabel(
                     text = taskTitle,
                     label = stringResource(id = R.string.title),
-                    onValueChange = { text: String ->
-                        if (text.length <= 100) {
-                            taskTitle = text
-                        }
+                    onValueChange = {
+                        viewModel.updateTitle(it)
                     })
                 Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingXL))
                 InputTopLabel(title = stringResource(id = R.string.priority))
                 PriorityDropDown(
                     priority = taskPriority,
-                    onPriority = { priority -> taskPriority = priority })
+                    onPriority = { priority -> viewModel.priority.value = priority })
                 Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingXL))
                 InputTopLabel(title = stringResource(id = R.string.description))
                 Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingS))
-                TaskDescriptionInput(text = taskDescription,
+                TaskDescriptionInput(
+                    text = taskDescription,
                     onValueChange = { text: String ->
-                        if (text.length <= 400) {
-                            taskDescription = text
+                        if (text.length <= TASK_DESCRIPTION_LENGTH_LIMIT) {
+                            viewModel.description.value = text
                         }
                     })
                 Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingXXL))
@@ -104,12 +102,11 @@ fun TaskScreen(
                         .align(Alignment.End),
                     inverted = true,
                     onClick = {
-                        val task = TaskModel(
-                            title = taskTitle,
-                            description = taskDescription,
-                            priority = taskPriority
-                        )
-                        viewModel.addTask(taskModel = task)
+                        if(selectedTask != null) {
+                            viewModel.updateTask()
+                        } else {
+                            viewModel.addTask()
+                        }
                     })
             }
         }

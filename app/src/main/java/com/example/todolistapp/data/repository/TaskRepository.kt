@@ -1,15 +1,18 @@
 package com.example.todolistapp.data.repository
 
 import com.example.todolistapp.data.Task
-import com.example.todolistapp.domain.model.TaskModel
 import kotlinx.coroutines.flow.Flow
 
 interface TaskRepository {
-    suspend fun addTask(taskModel: TaskModel)
+    suspend fun addTask(task: Task)
 
-    suspend fun deleteTask(id: Int)
+    suspend fun deleteTask(taskId: Int)
+
+    suspend fun updateTask(task: Task)
 
     fun getTask(id: Int): Flow<Task>
+
+    suspend fun getTaskDetails(id: String): Task
 
     fun getAllTasks(): Flow<List<Task>>
 
