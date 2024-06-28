@@ -34,6 +34,7 @@ import com.example.todolistapp.composable.TaskDescriptionInput
 import com.example.todolistapp.composable.ToolBar
 import com.example.todolistapp.data.Task
 import com.example.todolistapp.home.TaskViewModel
+import com.example.todolistapp.navigation.Screen
 import com.example.todolistapp.ui.theme.ToDoTheme
 import com.example.todolistapp.utils.Constants.TASK_DESCRIPTION_LENGTH_LIMIT
 
@@ -107,6 +108,7 @@ fun TaskScreen(
                         } else {
                             viewModel.addTask()
                         }
+                        navController.navigate(Screen.Home.route)
                     })
             }
         }

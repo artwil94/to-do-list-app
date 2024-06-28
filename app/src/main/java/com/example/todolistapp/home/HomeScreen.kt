@@ -24,6 +24,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,12 +37,14 @@ import com.example.todolistapp.composable.ActionButton
 import com.example.todolistapp.composable.ActionButtonType
 import com.example.todolistapp.composable.ChangeSystemBarColor
 import com.example.todolistapp.composable.ConfirmationDialog
+import com.example.todolistapp.composable.NewActionSnackBar
 import com.example.todolistapp.composable.ScreenHeader
 import com.example.todolistapp.data.Task
 import com.example.todolistapp.navigation.BottomBar
 import com.example.todolistapp.navigation.Screen
 import com.example.todolistapp.task.TaskItem
 import com.example.todolistapp.ui.theme.ToDoTheme
+import kotlinx.coroutines.delay
 
 @ExperimentalMaterial3Api
 @Composable
@@ -49,15 +52,28 @@ fun HomeScreen(
     viewModel: TaskViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
+    val coroutineScope = rememberCoroutineScope()
+    val allTasks by viewModel.allTasks.collectAsState()
+    var showDeleteConfirmDialog by remember { mutableStateOf(false) }
+    val selectedTask = remember { mutableStateOf<Task?>(null) }
+    var showSnackBar by remember { mutableStateOf(false) }
     ChangeSystemBarColor(statusBarColor = ToDoTheme.tDColors.screenHeader)
     LaunchedEffect(Unit) {
         viewModel.getAllTasks()
     }
-    val allTasks by viewModel.allTasks.collectAsState()
-    var showDeleteConfirmDialog by remember { mutableStateOf(false) }
-    val selectedTask = remember { mutableStateOf<Task?>(null) }
+    LaunchedEffect(key1 = showSnackBar) {
+        delay(1500)
+        showSnackBar = false
+    }
     Scaffold(
         modifier = Modifier.windowInsetsPadding(WindowInsets.navigationBars),
+        snackbarHost = {
+            if (showSnackBar)
+                Column {
+                    NewActionSnackBar()
+                    Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.padding))
+                }
+        },
         containerColor = ToDoTheme.tDColors.backgroundScreen,
         bottomBar = { BottomBar(navController = navController) }
     ) { innerPadding ->

@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -69,7 +68,7 @@ fun TaskItem(
             contentDescription = null
         )
         Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.padding))
-        Column(modifier = Modifier.width(200.dp)) {
+        Column(modifier = Modifier.width(250.dp)) {
             Text(
                 text = task.title,
                 style = ToDoTheme.tDTypography.taskTitle,
@@ -123,16 +122,6 @@ fun TaskItem(
                 }
             }
         }
-        Icon(
-            modifier = Modifier
-                .size(ToDoTheme.tDDimensions.editTaskIcon)
-                .weight(1f)
-                .padding(end = ToDoTheme.tDDimensions.padding)
-                .clickable {
-                    onEditClick.invoke()
-                }, imageVector = Icons.Filled.Edit,
-            contentDescription = "Edit Task"
-        )
         Icon(
             modifier = Modifier
                 .size(ToDoTheme.tDDimensions.editTaskIcon)
