@@ -26,6 +26,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.todolistapp.R
 import com.example.todolistapp.composable.ActionButton
+import com.example.todolistapp.composable.CategoryDropDown
 import com.example.todolistapp.composable.ChangeSystemBarColor
 import com.example.todolistapp.composable.InputFieldWithLabel
 import com.example.todolistapp.composable.InputTopLabel
@@ -68,6 +69,7 @@ fun TaskScreen(
             val taskTitle by viewModel.title
             val taskDescription by viewModel.description
             val taskPriority by viewModel.priority
+            val taskCategory by viewModel.category
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -85,6 +87,11 @@ fun TaskScreen(
                 PriorityDropDown(
                     priority = taskPriority,
                     onPriority = { priority -> viewModel.priority.value = priority })
+                Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingXL))
+                InputTopLabel(title = stringResource(id = R.string.category))
+                CategoryDropDown(
+                    category = taskCategory,
+                    onCategoryClick = { category -> viewModel.category.value = category })
                 Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingXL))
                 InputTopLabel(title = stringResource(id = R.string.description))
                 Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingS))

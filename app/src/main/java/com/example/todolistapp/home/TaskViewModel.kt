@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.todolistapp.data.Task
 import com.example.todolistapp.data.repository.TaskRepository
+import com.example.todolistapp.domain.model.Category
 import com.example.todolistapp.domain.model.Priority
 import com.example.todolistapp.domain.model.TaskModel
 import com.example.todolistapp.utils.Constants.TASK_TITLE_LENGTH_LIMIT
@@ -25,6 +26,7 @@ class TaskViewModel @Inject constructor(private val taskRepository: TaskReposito
     val title: MutableState<String> = mutableStateOf("")
     val description: MutableState<String> = mutableStateOf("")
     val priority: MutableState<Priority> = mutableStateOf(Priority.LOW)
+    val category: MutableState<Category> = mutableStateOf(Category.PERSONAL)
 
     private val _allTasks = MutableStateFlow<List<Task>>(emptyList())
     val allTasks: StateFlow<List<Task>> = _allTasks
@@ -34,7 +36,8 @@ class TaskViewModel @Inject constructor(private val taskRepository: TaskReposito
             val task = Task(
                 title = title.value,
                 description = description.value,
-                priority = priority.value
+                priority = priority.value,
+                category = category.value
             )
             taskRepository.addTask(task = task)
         }
