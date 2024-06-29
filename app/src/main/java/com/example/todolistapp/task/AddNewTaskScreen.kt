@@ -55,7 +55,7 @@ fun TaskScreen(
             ToolBar(
                 showTitle = true,
                 onNavigationIconClick = { navController.popBackStack() },
-                title = "Add new task",
+                title = stringResource(id = R.string.add_new_task),
                 withShadowing = true
             )
         }

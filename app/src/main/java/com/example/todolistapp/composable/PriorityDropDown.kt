@@ -122,7 +122,7 @@ fun CategoryDropDown(category: Category, onCategoryClick: (Category) -> Unit) {
         Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.paddingS))
         IconButton(modifier = Modifier
             .rotate(if(expanded) 180f else 0f)
-            .weight(1.5f), onClick = { /*TODO*/ }) {
+            .weight(1.5f), onClick = { expanded = ! expanded}) {
             Icon(
                 imageVector = Icons.Filled.ArrowDropDown,
                 contentDescription = stringResource(id = R.string.content_description_drop_down_arrow)
