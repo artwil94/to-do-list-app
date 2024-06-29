@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,7 +57,7 @@ fun TaskItem(
     val isTaskDone = rememberSaveable { mutableStateOf(false) }
     var showPriorityLabel by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.Top) {
+    Row(modifier = Modifier.fillMaxWidth() ) {
         Icon(
             modifier = Modifier.clickable {
                 isTaskDone.value = !isTaskDone.value
@@ -82,7 +83,15 @@ fun TaskItem(
                 Text(text = task.description, style = ToDoTheme.tDTypography.taskDescription)
             }
         }
-        Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.padding))
+        Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.paddingS))
+        task.category?.icon?.let { painterResource(id = it) }?.let {
+            Icon(
+                painter = it,
+                contentDescription = task.category.name,
+                modifier = Modifier.size(ToDoTheme.tDDimensions.editTaskIcon)
+            )
+        }
+        Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.paddingS))
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -114,7 +123,7 @@ fun TaskItem(
                                 style = ToDoTheme.tDTypography.priorityLabel
                             )
                             Text(
-                                text = "Priority",
+                                text = stringResource(id = R.string.priority),
                                 style = ToDoTheme.tDTypography.priorityLabel
                             )
                         }
@@ -122,15 +131,16 @@ fun TaskItem(
                 }
             }
         }
+        Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.padding))
         Icon(
             modifier = Modifier
                 .size(ToDoTheme.tDDimensions.editTaskIcon)
-                .weight(1f)
+                .weight(2f)
                 .padding(end = ToDoTheme.tDDimensions.paddingS)
                 .clickable {
                     onDeleteClick.invoke(task)
                 }, imageVector = Icons.Filled.Delete,
-            contentDescription = "Delete task"
+            contentDescription = stringResource(id = R.string.content_description_delete_task)
         )
     }
 }
