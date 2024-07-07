@@ -57,33 +57,36 @@ fun TaskItem(
     val isTaskDone = rememberSaveable { mutableStateOf(false) }
     var showPriorityLabel by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-    Row(modifier = Modifier.fillMaxWidth() ) {
-        Icon(
-            modifier = Modifier.clickable {
-                isTaskDone.value = !isTaskDone.value
-                onCheckboxClick.invoke()
-            },
-            painter = painterResource(
-                id = if (isTaskDone.value) R.drawable.ic_checked else R.drawable.ic_unchecked
-            ),
-            contentDescription = null
-        )
-        Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.padding))
-        Column(modifier = Modifier.width(250.dp)) {
-            Text(
-                text = task.title,
-                style = ToDoTheme.tDTypography.taskTitle,
-                textDecoration = if (isTaskDone.value) TextDecoration.LineThrough else TextDecoration.None,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-
+    Column {
+        task.dueDate?.let { Text(text = it, style = ToDoTheme.tDTypography.taskDate, textDecoration = TextDecoration.Underline) }
+        Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingS))
+        Row(modifier = Modifier.fillMaxWidth()) {
+            Icon(
+                modifier = Modifier.clickable {
+                    isTaskDone.value = !isTaskDone.value
+                    onCheckboxClick.invoke()
+                },
+                painter = painterResource(
+                    id = if (isTaskDone.value) R.drawable.ic_checked else R.drawable.ic_unchecked
+                ),
+                contentDescription = null
             )
-            if (task.description.isNotBlank()) {
-                Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingS))
-                Text(text = task.description, style = ToDoTheme.tDTypography.taskDescription)
+            Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.padding))
+            Column(modifier = Modifier.width(250.dp)) {
+                Text(
+                    text = task.title,
+                    style = ToDoTheme.tDTypography.taskTitle,
+                    textDecoration = if (isTaskDone.value) TextDecoration.LineThrough else TextDecoration.None,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+
+                )
+                if (task.description.isNotBlank()) {
+                    Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingS))
+                    Text(text = task.description, style = ToDoTheme.tDTypography.taskDescription)
+                }
             }
-        }
-        Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.paddingS))
+            Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.paddingS))
 //        task.category?.icon?.let { painterResource(id = it) }?.let {
 //            Icon(
 //                painter = it,
@@ -92,54 +95,59 @@ fun TaskItem(
 //            )
 //        }
 //        Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.paddingS))
-        Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-        ) {
-            Column {
-                Box(contentAlignment = Alignment.Center) {
-                    Canvas(
-                        modifier = Modifier
-                            .size(
-                                if (showPriorityLabel) ToDoTheme.tDDimensions.priorityIndicatorMin else
-                                    ToDoTheme.tDDimensions.priorityIndicator
-                            )
-                            .clickable {
-                                showPriorityLabel = true
-                            }
-                    ) {
-                        drawCircle(color = task.priority?.color ?: Color.Transparent)
-                    }
-                    if (showPriorityLabel) {
-                        coroutineScope.launch {
-                            delay(1000)
-                            showPriorityLabel = false
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                Column {
+                    Box(contentAlignment = Alignment.Center) {
+                        Canvas(
+                            modifier = Modifier
+                                .size(
+                                    if (showPriorityLabel) ToDoTheme.tDDimensions.priorityIndicatorMin else
+                                        ToDoTheme.tDDimensions.priorityIndicator
+                                )
+                                .clickable {
+                                    showPriorityLabel = true
+                                }
+                        ) {
+                            drawCircle(color = task.priority?.color ?: Color.Transparent)
                         }
-                        Column(modifier = Modifier.align(Alignment.TopCenter)) {
-                            Text(
-                                text = (task.priority?.name ?: "").lowercase()
-                                    .replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() },
-                                style = ToDoTheme.tDTypography.priorityLabel
-                            )
-                            Text(
-                                text = stringResource(id = R.string.priority),
-                                style = ToDoTheme.tDTypography.priorityLabel
-                            )
+                        if (showPriorityLabel) {
+                            coroutineScope.launch {
+                                delay(1000)
+                                showPriorityLabel = false
+                            }
+                            Column(modifier = Modifier.align(Alignment.TopCenter)) {
+                                Text(
+                                    text = (task.priority?.name ?: "").lowercase()
+                                        .replaceFirstChar {
+                                            if (it.isLowerCase()) it.titlecase(
+                                                Locale.getDefault()
+                                            ) else it.toString()
+                                        },
+                                    style = ToDoTheme.tDTypography.priorityLabel
+                                )
+                                Text(
+                                    text = stringResource(id = R.string.priority),
+                                    style = ToDoTheme.tDTypography.priorityLabel
+                                )
+                            }
                         }
                     }
                 }
             }
+            Icon(
+                modifier = Modifier
+                    .size(ToDoTheme.tDDimensions.editTaskIcon)
+                    .weight(1f)
+                    .padding(end = ToDoTheme.tDDimensions.paddingS)
+                    .clickable {
+                        onDeleteClick.invoke(task)
+                    }, imageVector = Icons.Filled.Delete,
+                contentDescription = stringResource(id = R.string.content_description_delete_task)
+            )
         }
-        Icon(
-            modifier = Modifier
-                .size(ToDoTheme.tDDimensions.editTaskIcon)
-                .weight(1f)
-                .padding(end = ToDoTheme.tDDimensions.paddingS)
-                .clickable {
-                    onDeleteClick.invoke(task)
-                }, imageVector = Icons.Filled.Delete,
-            contentDescription = stringResource(id = R.string.content_description_delete_task)
-        )
     }
 }

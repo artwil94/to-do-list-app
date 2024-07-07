@@ -35,4 +35,6 @@ class TaskRepositoryImpl @Inject constructor(private val tasksDataBase: TasksDat
         tasksDataBase.taskDao.getAllTasks()
 
 
+    override fun getTasksSortedByDate(): Flow<List<Task>> =
+        tasksDataBase.taskDao.getTasksSortedByDueDate()
 }

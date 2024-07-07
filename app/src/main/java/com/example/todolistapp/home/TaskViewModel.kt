@@ -9,7 +9,6 @@ import com.example.todolistapp.data.Task
 import com.example.todolistapp.data.repository.TaskRepository
 import com.example.todolistapp.domain.model.Category
 import com.example.todolistapp.domain.model.Priority
-import com.example.todolistapp.domain.model.TaskModel
 import com.example.todolistapp.utils.Constants.TASK_TITLE_LENGTH_LIMIT
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -27,9 +26,14 @@ class TaskViewModel @Inject constructor(private val taskRepository: TaskReposito
     val description: MutableState<String> = mutableStateOf("")
     val priority: MutableState<Priority> = mutableStateOf(Priority.LOW)
     val category: MutableState<Category> = mutableStateOf(Category.PERSONAL)
+    val dueDate: MutableState<String> = mutableStateOf("")
 
     private val _allTasks = MutableStateFlow<List<Task>>(emptyList())
     val allTasks: StateFlow<List<Task>> = _allTasks
+
+    init {
+        sortTasksByDueDate()
+    }
 
     fun addTask() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -37,7 +41,8 @@ class TaskViewModel @Inject constructor(private val taskRepository: TaskReposito
                 title = title.value,
                 description = description.value,
                 priority = priority.value,
-                category = category.value
+                category = category.value,
+                dueDate = dueDate.value
             )
             taskRepository.addTask(task = task)
         }
@@ -64,7 +69,7 @@ class TaskViewModel @Inject constructor(private val taskRepository: TaskReposito
     fun getAllTasks() {
         viewModelScope.launch {
             taskRepository.getAllTasks().collect { tasks ->
-                _allTasks.value = tasks
+                _allTasks.value = tasks.sortedBy { it.dueDate }
             }
         }
     }
@@ -83,10 +88,24 @@ class TaskViewModel @Inject constructor(private val taskRepository: TaskReposito
             title.value = newTitle
         }
     }
-}
 
-data class TaskUIState(
-    val isLoading: Boolean = false,
-    val tasks: StateFlow<List<TaskModel>>? = null,
-    val isDone: Boolean = false
-)
+    fun sortTasksByDueDate() {
+        viewModelScope.launch {
+            val sortedList = _allTasks.value.sortedBy { it.dueDate }
+            _allTasks.value = sortedList
+        }
+    }
+
+    fun sortTasksByLowestPriority() {
+        viewModelScope.launch {
+            val sortedList = _allTasks.value.sortedBy { it.priority?.priorityValue }
+            _allTasks.value = sortedList
+        }
+    }
+    fun sortTasksByHighestPriority() {
+        viewModelScope.launch {
+            val sortedList = _allTasks.value.sortedByDescending { it.priority?.priorityValue }
+            _allTasks.value = sortedList
+        }
+    }
+}

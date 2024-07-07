@@ -19,6 +19,7 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -36,13 +37,11 @@ import androidx.navigation.NavHostController
 import com.example.todolistapp.R
 import com.example.todolistapp.composable.ActionButton
 import com.example.todolistapp.composable.ActionButtonType
-import com.example.todolistapp.composable.CategoryItem
 import com.example.todolistapp.composable.ChangeSystemBarColor
 import com.example.todolistapp.composable.ConfirmationDialog
 import com.example.todolistapp.composable.NewActionSnackBar
 import com.example.todolistapp.composable.ScreenHeader
 import com.example.todolistapp.data.Task
-import com.example.todolistapp.domain.model.Category
 import com.example.todolistapp.navigation.BottomBar
 import com.example.todolistapp.navigation.Screen
 import com.example.todolistapp.task.TaskItem
@@ -89,11 +88,13 @@ fun HomeScreen(
             ScreenHeader(stringResource(id = R.string.my_tasks))
             Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.padding))
             Row(
-                modifier = Modifier.fillMaxWidth().padding(
-                    start = ToDoTheme.tDDimensions.paddingS,
-                    end = ToDoTheme.tDDimensions.paddingXL,
-                    top = ToDoTheme.tDDimensions.paddingS
-                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(
+                        start = ToDoTheme.tDDimensions.paddingS,
+                        end = ToDoTheme.tDDimensions.paddingXL,
+                        top = ToDoTheme.tDDimensions.paddingS
+                    ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 ActionButton(
@@ -123,10 +124,26 @@ fun HomeScreen(
                         DropdownMenuItem(
                             onClick = {
                                 filtersExpanded = false
-//                        onCategoryClick.invoke(Category.PERSONAL)
-                            }, modifier = Modifier.align(Alignment.End)
+                                viewModel.sortTasksByDueDate()
+                            }
                         ) {
-                            CategoryItem(category = Category.PERSONAL)
+                            Text(text = "Sorted by: DATE")
+                        }
+                        DropdownMenuItem(
+                            onClick = {
+                                filtersExpanded = false
+                                viewModel.sortTasksByLowestPriority()
+                            }
+                        ) {
+                            Text(text = "Sorted by: LowestPriority")
+                        }
+                        DropdownMenuItem(
+                            onClick = {
+                                filtersExpanded = false
+                                viewModel.sortTasksByHighestPriority()
+                            }
+                        ) {
+                            Text(text = "Sorted by: HighestPriority")
                         }
                     }
                 }
@@ -163,7 +180,7 @@ fun HomeScreen(
                                 viewModel.updateTask()
                             }
                         )
-                        Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.padding))
+                        Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingMedium))
                     }
                     item {
                         Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.padding))

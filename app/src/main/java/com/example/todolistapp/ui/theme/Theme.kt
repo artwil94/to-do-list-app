@@ -201,6 +201,13 @@ data class TdTypography(
         color = Color(0xFF696878),
         fontFamily = ToDoTheme.fonts.robotoLight
     ),
+    val taskDate: TextStyle = TextStyle(
+        fontSize = 14.sp,
+        lineHeight = 20.sp,
+        fontWeight = FontWeight(300),
+        color = Color(0xFF333333),
+        fontFamily = ToDoTheme.fonts.robotoBold
+    ),
     val priorityLabel: TextStyle = bottomBarLabelUnSelect
 )
 

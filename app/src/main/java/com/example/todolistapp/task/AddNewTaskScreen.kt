@@ -84,6 +84,7 @@ fun TaskScreen(
             val taskDescription by viewModel.description
             val taskPriority by viewModel.priority
             val taskCategory by viewModel.category
+            val dueDate by viewModel.dueDate
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -120,7 +121,7 @@ fun TaskScreen(
                     onCategoryClick = { category -> viewModel.category.value = category })
                 Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingMedium))
                 InputFieldWithLabel(
-                    text = taskTitle,
+                    text = dueDate,
                     label = stringResource(id = R.string.due_date),
                     inputFieldType = InputFieldType.Disabled,
                     onClick = { showDatePicker = !showDatePicker },
@@ -132,6 +133,7 @@ fun TaskScreen(
                         datePickerState = datePickerState,
                         onSelectDateClick = {
                             showDatePicker = false
+                            viewModel.dueDate.value = formattedDate
                         })
                 }
                 Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingMedium))

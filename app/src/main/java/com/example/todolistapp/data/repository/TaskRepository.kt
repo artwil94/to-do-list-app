@@ -16,4 +16,5 @@ interface TaskRepository {
 
     fun getAllTasks(): Flow<List<Task>>
 
+    fun getTasksSortedByDate(): Flow<List<Task>>
 }
