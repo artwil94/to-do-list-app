@@ -15,8 +15,6 @@ import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,10 +56,10 @@ fun PriorityDropDown(priority: Priority, onPriority: (Priority) -> Unit) {
             modifier = Modifier.weight(8f)
         )
         IconButton(modifier = Modifier
-            .rotate(if(expanded) 180f else 0f)
-            .weight(1.5f), onClick = { /*TODO*/ }) {
+            .rotate(if (expanded) 180f else 0f)
+            .weight(1.5f), onClick = { expanded = !expanded }) {
             Icon(
-                imageVector = Icons.Filled.ArrowDropDown,
+                painter = painterResource(id = R.drawable.ic_arrow_dropdown),
                 contentDescription = stringResource(id = R.string.content_description_drop_down_arrow)
             )
         }
@@ -121,10 +119,10 @@ fun CategoryDropDown(category: Category, onCategoryClick: (Category) -> Unit) {
         )
         Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.paddingS))
         IconButton(modifier = Modifier
-            .rotate(if(expanded) 180f else 0f)
-            .weight(1.5f), onClick = { expanded = ! expanded}) {
+            .rotate(if (expanded) 180f else 0f)
+            .weight(1.5f), onClick = { expanded = !expanded }) {
             Icon(
-                imageVector = Icons.Filled.ArrowDropDown,
+                painter = painterResource(id = R.drawable.ic_arrow_dropdown),
                 contentDescription = stringResource(id = R.string.content_description_drop_down_arrow)
             )
         }

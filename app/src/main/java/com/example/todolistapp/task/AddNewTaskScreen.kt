@@ -12,10 +12,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DisplayMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -28,6 +36,8 @@ import com.example.todolistapp.R
 import com.example.todolistapp.composable.ActionButton
 import com.example.todolistapp.composable.CategoryDropDown
 import com.example.todolistapp.composable.ChangeSystemBarColor
+import com.example.todolistapp.composable.DatePickerComponent
+import com.example.todolistapp.composable.InputFieldType
 import com.example.todolistapp.composable.InputFieldWithLabel
 import com.example.todolistapp.composable.InputTopLabel
 import com.example.todolistapp.composable.PriorityDropDown
@@ -38,6 +48,10 @@ import com.example.todolistapp.home.TaskViewModel
 import com.example.todolistapp.navigation.Screen
 import com.example.todolistapp.ui.theme.ToDoTheme
 import com.example.todolistapp.utils.Constants.TASK_DESCRIPTION_LENGTH_LIMIT
+import com.example.todolistapp.utils.DataTimeHandler.toLocalDateTime
+import com.example.todolistapp.utils.DataTimeHandler.toMillis
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 @ExperimentalComposeUiApi
 @ExperimentalMaterial3Api
@@ -75,24 +89,52 @@ fun TaskScreen(
                     .fillMaxWidth()
                     .systemBarsPadding()
                     .padding(ToDoTheme.tDDimensions.padding)
+                    .verticalScroll(rememberScrollState())
             ) {
+                var showDatePicker by remember { mutableStateOf(false) }
+                var initialDate by remember { mutableStateOf<LocalDateTime>(LocalDateTime.now()) }
+                val formattedDate = DateTimeFormatter.ofPattern("dd/MM/yyyy").format(initialDate)
+                val datePickerState = rememberDatePickerState(
+                    yearRange = (2024..2030),
+                    initialSelectedDateMillis = initialDate.toMillis(),
+                    initialDisplayMode = DisplayMode.Picker
+                )
+                LaunchedEffect(datePickerState.selectedDateMillis) {
+                    initialDate = datePickerState.selectedDateMillis!!.toLocalDateTime()
+                }
                 InputFieldWithLabel(
                     text = taskTitle,
                     label = stringResource(id = R.string.title),
                     onValueChange = {
                         viewModel.updateTitle(it)
                     })
-                Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingXL))
+                Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingMedium))
                 InputTopLabel(title = stringResource(id = R.string.priority))
                 PriorityDropDown(
                     priority = taskPriority,
                     onPriority = { priority -> viewModel.priority.value = priority })
-                Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingXL))
+                Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingMedium))
                 InputTopLabel(title = stringResource(id = R.string.category))
                 CategoryDropDown(
                     category = taskCategory,
                     onCategoryClick = { category -> viewModel.category.value = category })
-                Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingXL))
+                Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingMedium))
+                InputFieldWithLabel(
+                    text = taskTitle,
+                    label = stringResource(id = R.string.due_date),
+                    inputFieldType = InputFieldType.Disabled,
+                    onClick = { showDatePicker = !showDatePicker },
+                    trailingIcon = R.drawable.ic_arrow_dropdown,
+                    placeHolder = formattedDate
+                )
+                if (showDatePicker) {
+                    DatePickerComponent(
+                        datePickerState = datePickerState,
+                        onSelectDateClick = {
+                            showDatePicker = false
+                        })
+                }
+                Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingMedium))
                 InputTopLabel(title = stringResource(id = R.string.description))
                 Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.paddingS))
                 TaskDescriptionInput(
@@ -110,7 +152,7 @@ fun TaskScreen(
                         .align(Alignment.End),
                     inverted = true,
                     onClick = {
-                        if(selectedTask != null) {
+                        if (selectedTask != null) {
                             viewModel.updateTask()
                         } else {
                             viewModel.addTask()

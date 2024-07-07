@@ -84,14 +84,14 @@ fun TaskItem(
             }
         }
         Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.paddingS))
-        task.category?.icon?.let { painterResource(id = it) }?.let {
-            Icon(
-                painter = it,
-                contentDescription = task.category.name,
-                modifier = Modifier.size(ToDoTheme.tDDimensions.editTaskIcon)
-            )
-        }
-        Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.paddingS))
+//        task.category?.icon?.let { painterResource(id = it) }?.let {
+//            Icon(
+//                painter = it,
+//                contentDescription = task.category.name,
+//                modifier = Modifier.size(ToDoTheme.tDDimensions.editTaskIcon)
+//            )
+//        }
+//        Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.paddingS))
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -131,11 +131,10 @@ fun TaskItem(
                 }
             }
         }
-        Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.padding))
         Icon(
             modifier = Modifier
                 .size(ToDoTheme.tDDimensions.editTaskIcon)
-                .weight(2f)
+                .weight(1f)
                 .padding(end = ToDoTheme.tDDimensions.paddingS)
                 .clickable {
                     onDeleteClick.invoke(task)

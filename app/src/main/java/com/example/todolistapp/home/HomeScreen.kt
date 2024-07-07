@@ -14,9 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.DropdownMenu
+import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -28,18 +29,20 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.todolistapp.R
 import com.example.todolistapp.composable.ActionButton
 import com.example.todolistapp.composable.ActionButtonType
+import com.example.todolistapp.composable.CategoryItem
 import com.example.todolistapp.composable.ChangeSystemBarColor
 import com.example.todolistapp.composable.ConfirmationDialog
 import com.example.todolistapp.composable.NewActionSnackBar
 import com.example.todolistapp.composable.ScreenHeader
 import com.example.todolistapp.data.Task
+import com.example.todolistapp.domain.model.Category
 import com.example.todolistapp.navigation.BottomBar
 import com.example.todolistapp.navigation.Screen
 import com.example.todolistapp.task.TaskItem
@@ -57,6 +60,7 @@ fun HomeScreen(
     var showDeleteConfirmDialog by remember { mutableStateOf(false) }
     val selectedTask = remember { mutableStateOf<Task?>(null) }
     var showSnackBar by remember { mutableStateOf(false) }
+    var filtersExpanded by remember { mutableStateOf(false) }
     ChangeSystemBarColor(statusBarColor = ToDoTheme.tDColors.screenHeader)
     LaunchedEffect(Unit) {
         viewModel.getAllTasks()
@@ -85,7 +89,7 @@ fun HomeScreen(
             ScreenHeader(stringResource(id = R.string.my_tasks))
             Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.padding))
             Row(
-                modifier = Modifier.padding(
+                modifier = Modifier.fillMaxWidth().padding(
                     start = ToDoTheme.tDDimensions.paddingS,
                     end = ToDoTheme.tDDimensions.paddingXL,
                     top = ToDoTheme.tDDimensions.paddingS
@@ -101,10 +105,31 @@ fun HomeScreen(
                     onClick = { navController.navigate(Screen.Task.route(taskId = null)) },
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_filter), contentDescription = "",
-                    tint = ToDoTheme.tDColors.textStandard
+                ActionButton(
+                    text = "Filters",
+                    trailingIcon = R.drawable.ic_filter,
+                    onClick = {
+                        filtersExpanded = true
+                    },
+                    color = Color.White,
+                    actionButtonType = ActionButtonType.WithBorder
                 )
+                DropdownMenu(
+                    expanded = filtersExpanded,
+                    onDismissRequest = { filtersExpanded = false },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Column(horizontalAlignment = Alignment.End) {
+                        DropdownMenuItem(
+                            onClick = {
+                                filtersExpanded = false
+//                        onCategoryClick.invoke(Category.PERSONAL)
+                            }, modifier = Modifier.align(Alignment.End)
+                        ) {
+                            CategoryItem(category = Category.PERSONAL)
+                        }
+                    }
+                }
             }
             Spacer(modifier = Modifier.height(ToDoTheme.tDDimensions.padding))
             HorizontalDivider()

@@ -34,6 +34,7 @@ fun ActionButton(
     color: Color = ToDoTheme.tDColors.actionButton,
     inverted: Boolean = false,
     @DrawableRes leadingIcon: Int? = null,
+    @DrawableRes trailingIcon: Int? = null,
     onClick: () -> Unit,
 ) {
     val colors =
@@ -65,7 +66,7 @@ fun ActionButton(
             if (leadingIcon != null) {
                 Icon(
                     painter = painterResource(id = leadingIcon),
-                    contentDescription = "",
+                    contentDescription = null,
                     tint = if (inverted) Color.White else ToDoTheme.tDColors.textStandard
                 )
                 Spacer(modifier = Modifier.width(ToDoTheme.tDDimensions.paddingXs))
@@ -74,6 +75,13 @@ fun ActionButton(
                 text = text.uppercase(),
                 style = if (inverted) ToDoTheme.tDTypography.actionButtonWhite else ToDoTheme.tDTypography.actionButton
             )
+            trailingIcon?.let {
+                Icon(
+                    painter = painterResource(id = trailingIcon),
+                    contentDescription = null,
+                    tint = if (inverted) Color.White else ToDoTheme.tDColors.textStandard
+                )
+            }
         }
     }
 }
